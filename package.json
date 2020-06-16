@@ -1,7 +1,7 @@
 {
   "name": "proyecto",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "babel-node server.js",
   "scripts": {
     "start": "SET NODE_ENV=production&babel-node server.js",
     "dev": "SET NODE_ENV=development&nodemon --exec babel-node server.js ",

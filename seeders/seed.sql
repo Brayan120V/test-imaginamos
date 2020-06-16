@@ -1,9 +1,8 @@
-CREATE user -p 5432 -U postgres -D -E READONLY -P -R -S personforlife; 
-CREATE DATABASE IF NOT EXISTS developmentmaginamos;
+/* CREATE DATABASE productionimaginamos;
 
 
-\c developmentmaginamos;
-
+\c productionimaginamos;
+ */
 
 BEGIN TRANSACTION;
 CREATE TYPE service_type AS enum ('Maintenance', 'Installation');
