@@ -1,0 +1,582 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Test Imaginamos",
+        "description": "Test Imaginamos Node.js Application API",
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        }
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "tags": [
+        {
+            "name": "Users",
+            "description": "API for person in the system"
+        },
+        {
+            "name": "Ticket",
+            "description": "API for ticket in the system"
+        },
+        {
+            "name": "Service",
+            "description": "API for service in the system"
+        }
+    ],
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/user/create": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "description": "Create new user in system",
+                "parameters": [
+                    {
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "description": "User that we want to create",
+                        "examples": {
+                            "id": 0,
+                            "name": "string",
+                            "phone": 0,
+                            "role": "string",
+                            "password": "string"
+                        },
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New user is created",
+                        "examples": {
+                            "application/json": {
+                                "message": "user created"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "parameters": [
+                {
+                    "name": "credentials",
+                    "in": "body",
+                    "required": true,
+                    "schema": {
+                        "required": [
+                            "id",
+                            "password"
+                        ],
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 1002450001
+                            },
+                            "password": {
+                                "type": "string",
+                                "example": "thisissecure"
+                            }
+                        }
+                    }
+                }
+            ],
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Login user usign id and password",
+                "responses": {
+                    "200": {
+                        "description": "New user is created",
+                        "examples": {
+                            "application/json": {
+                                "message": "user logged",
+                                "token": "string"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Invalid data",
+                        "examples": {
+                            "application/json": {
+                                "message": "user or password not exists"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket/create": {
+            "post": {
+                "tags": [
+                    "Ticket"
+                ],
+                "description": "Create new ticket and service in system",
+                "parameters": [
+                    {
+                        "name": "Ticket",
+                        "in": "body",
+                        "required": true,
+                        "description": "Ticket that we want to create with role Client #Go to create a user with Client role and login",
+                        "schema": {
+                            "required": [
+                                "type",
+                                "address",
+                                "requestat"
+                            ],
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "items": [
+                                        "Maintenance",
+                                        "Installation"
+                                    ],
+                                    "example": "Maintenance"
+                                },
+                                "address": {
+                                    "type": "string",
+                                    "example": "Cra 18 #12-19"
+                                },
+                                "requestat": {
+                                    "type": "date",
+                                    "example": "2020-12-12"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "required": true,
+                        "description": "Autorization generated with the login",
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "New ticket is created",
+                        "examples": {
+                            "application/json": {
+                                "message": "ticket created",
+                                "service": "1"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error finding technicals",
+                        "examples": {
+                            "application/json": {
+                                "message": "technicals not free"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The token has expired or token is not sended or the user role isn't Client",
+                        "examples": {
+                            "application/json": {
+                                "message": "Forbbiden"
+                            }
+                        }
+                    },
+                    "418": {
+                        "description": "Error creating service caused by incomplet data",
+                        "examples": {
+                            "application/json": {
+                                "message": "ticket not created"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/ticket": {
+            "parameters": [
+                {
+                    "name": "token",
+                    "in": "header",
+                    "required": true,
+                    "description": "Autorization generated with the login",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Ticket"
+                ],
+                "summary": "Get tickets",
+                "responses": {
+                    "200": {
+                        "description": "All tickes are returned",
+                        "examples": {
+                            "application/json": {
+                                "tickets": "array"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The token has expired or token is not sended or the user role isn't Client",
+                        "examples": {
+                            "application/json": {
+                                "message": "Forbbiden"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client's ticket not found",
+                        "examples": {
+                            "application/json": {
+                                "message": "Not Found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/service": {
+            "parameters": [
+                {
+                    "name": "token",
+                    "in": "header",
+                    "required": true,
+                    "description": "Autorization generated with the login for Technical",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Service"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All services are returned",
+                        "examples": {
+                            "application/json": {
+                                "services": "array"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The token has expired or token is not sended or the user role isn't Client",
+                        "examples": {
+                            "application/json": {
+                                "message": "Forbbiden"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Technical's services not found",
+                        "examples": {
+                            "application/json": {
+                                "message": "Not Found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/service/{id}": {
+            "parameters": [
+                {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "description": "ServiceId to find",
+                    "type": "string"
+                },
+                {
+                    "name": "token",
+                    "in": "header",
+                    "required": true,
+                    "description": "Autorization generated with the login",
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "Service"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All services are returned",
+                        "examples": {
+                            "application/json": {
+                                "service": "object"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The token has expired or token is not sended or the user role isn't Client",
+                        "examples": {
+                            "application/json": {
+                                "message": "Forbbiden"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Client's services or Technical's services not found",
+                        "examples": {
+                            "application/json": {
+                                "message": "Not Found"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/service/rate/{id}": {
+            "put": {
+                "tags": [
+                    "Service"
+                ],
+                "parameters": [
+                    {
+                        "name": "rate",
+                        "in": "body",
+                        "required": true,
+                        "description": "Rate of the service assigned by the Client",
+                        "schema": {
+                            "required": "rate",
+                            "properties": {
+                                "rate": {
+                                    "type": "number",
+                                    "example": 4.5
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ServiceId to find",
+                        "type": "string"
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "required": true,
+                        "description": "Autorization generated with the login",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All services are returned",
+                        "examples": {
+                            "application/json": {
+                                "message": "service updated",
+                                "rate": "number"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The token has expired or token is not sended or the user role isn't Client",
+                        "examples": {
+                            "application/json": {
+                                "message": "Forbbiden"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/service/status/{id}": {
+            "put": {
+                "tags": [
+                    "Service"
+                ],
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "body",
+                        "required": true,
+                        "description": "Rate of the service assigned by the Technical",
+                        "schema": {
+                            "required": "status",
+                            "properties": {
+                                "status": {
+                                    "type": "string",
+                                    "example": "Working",
+                                    "items": [
+                                        "Completed",
+                                        "Working",
+                                        "Waiting"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ServiceId to find",
+                        "type": "string"
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "required": true,
+                        "description": "Autorization generated with the login",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "All services are returned",
+                        "examples": {
+                            "application/json": {
+                                "message": "service updated",
+                                "status": "Working"
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The token has expired or token is not sended or the user role isn't Client",
+                        "examples": {
+                            "application/json": {
+                                "message": "Forbbiden"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "required": [
+                "id",
+                "name",
+                "phone",
+                "role",
+                "password"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "uniqueItems": true,
+                    "example": 1002450001
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Carlos Rincón"
+                },
+                "phone": {
+                    "type": "integer",
+                    "uniqueItems": true,
+                    "example": 3121230000
+                },
+                "role": {
+                    "type": "string",
+                    "items": [
+                        "Technical",
+                        "Client"
+                    ],
+                    "example": "Technical"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "thisissecure"
+                }
+            }
+        },
+        "Ticket": {
+            "required": [
+                "idticket",
+                "client_person_id",
+                "createdat"
+            ],
+            "properties": {
+                "idticket": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "client_person_id": {
+                    "type": "integer",
+                    "example": 1000569325
+                },
+                "createdat": {
+                    "type": "date",
+                    "example": "2020-12-12"
+                }
+            }
+        },
+        "Service": {
+            "required": [
+                "idservice",
+                "ticket_idticket",
+                "technical_person_id",
+                "client_person_id",
+                "type",
+                "status",
+                "address",
+                "requestat"
+            ],
+            "properties": {
+                "idservice": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "ticket_idticket": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "technical_person_id": {
+                    "type": "integer",
+                    "example": 1045632186
+                },
+                "client_person_id": {
+                    "type": "integer",
+                    "example": 1045632187
+                },
+                "type": {
+                    "type": "string",
+                    "items": [
+                        "Maintenance",
+                        "Installation"
+                    ],
+                    "example": "Installation"
+                },
+                "status": {
+                    "type": "string",
+                    "items": [
+                        "Completed",
+                        "Working",
+                        "Waiting"
+                    ],
+                    "example": "Maintenance"
+                },
+                "address": {
+                    "type": "string",
+                    "example": "Cra 18 #12-19"
+                },
+                "requestat": {
+                    "type": "date",
+                    "example": "2020-12-12"
+                }
+            }
+        }
+    }
+}
