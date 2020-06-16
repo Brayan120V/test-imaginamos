@@ -6,6 +6,7 @@ import path from 'path';
 import morgan from 'morgan';
 import swaggerUi from 'swagger-ui-express';
 import Router from 'express';
+import cors from 'cors';
 
 const swaggerDocument = require('./swagger.json');
 
@@ -21,6 +22,8 @@ app.use(bodyParser.urlencoded({
   extended: true,
   parameterLimit: 50000,
 }));
+
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1', router);
