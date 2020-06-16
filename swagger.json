@@ -9,7 +9,6 @@
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "host": "localhost:8080",
     "basePath": "/api/v1",
     "tags": [
         {
@@ -24,9 +23,6 @@
             "name": "Service",
             "description": "API for service in the system"
         }
-    ],
-    "schemes": [
-        "http"
     ],
     "consumes": [
         "application/json"
