@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "babel-node server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production&babel-node server.js",
+    "start": "babel-node server.js",
     "dev": "SET NODE_ENV=development&nodemon --exec babel-node server.js ",
     "test": "SET NODE_ENV=test&jest --detectOpenHandles --forceExit",
     "test:coverage": "SET NODE_ENV=test&jest --coverage --detectOpenHandles --forceExit",
