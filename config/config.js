@@ -8,7 +8,7 @@ if (process.env.NODE_ENV === 'production') { process.env.DATABASE_URL = process.
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: isProduction,
+  ssl: { rejectUnauthorized: false },
 });
 
 module.exports = pool;
